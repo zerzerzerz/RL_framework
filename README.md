@@ -1,5 +1,10 @@
 # pytorch-a2c-ppo-acktr
 
+## ZRZ Notes
+- `next_state, reward, done, info = env.step(antion)`
+  - `info` is a dict
+
+
 ## Update (April 12th, 2021)
 
 PPO is great, but [Soft Actor Critic](https://arxiv.org/abs/1812.05905) can be better for many continuous control tasks. Please check out [my new RL](http://github.com/ikostrikov/jax-rl) repository in jax.
