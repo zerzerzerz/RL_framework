@@ -24,7 +24,8 @@ class MyBaseEnv():
 class MyEnv(MyBaseEnv):
     def __init__(self, observation_space, action_space, device) -> None:
         # super().__init__(observation_space, action_space, device)
-        self.env = gym.make('Acrobot-v1')
+        # self.env = gym.make('Acrobot-v1')
+        self.env = gym.make('LunarLander-v2')
         self.observation_space = self.env.observation_space
         self.action_space = self.env.action_space
         super().__init__(self.observation_space, self.action_space, device)
