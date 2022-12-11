@@ -3,6 +3,7 @@
 ## ZRZ Notes
 - `next_state, reward, done, info = env.step(antion)`
   - `info` is a dict
+- python3.7
 
 
 ## Update (April 12th, 2021)
