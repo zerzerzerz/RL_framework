@@ -8,6 +8,7 @@ import random
 import os
 import pickle
 import time
+import argparse
 
 # Necessary for my KFAC implementation.
 class AddBias(nn.Module):
@@ -100,3 +101,17 @@ def mkdir(dir):
         shutil.rmtree(dir)
     os.makedirs(dir)
 
+
+def construct_args_from_dict(d):
+    parser = argparse.ArgumentParser()
+    for k,v in d.items():
+        parser.add_argument(f'--{k}', type=type(v), default=v)
+    args = parser.parse_args()
+    return args
+
+
+if __name__ == "__main__":
+    print('hello, world!')
+    d = load_json('result-GAE-2/args.json')
+    args = construct_args_from_dict(d)
+    print(args)

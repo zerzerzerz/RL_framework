@@ -4,7 +4,7 @@ from os.path import join
 
 def get_args():
     parser = argparse.ArgumentParser(description='RL')
-    parser.add_argument('--algo', default='ppo', help='algorithm to use: a2c | ppo | acktr', choices=['a2c', 'ppo', 'acktr'])
+    parser.add_argument('--algo', type=str, default='ppo', help='algorithm to use: a2c | ppo | acktr', choices=['a2c', 'ppo', 'acktr'])
     parser.add_argument('--device', type=str, default='cuda:4', help='gpu device')
     parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
     parser.add_argument('--eps', type=float, default=1e-5, help='RMSprop optimizer epsilon')
@@ -21,10 +21,10 @@ def get_args():
     parser.add_argument('--ppo_epoch', type=int, default=100, help='number of ppo epochs')
     parser.add_argument('--num_mini_batch', type=int, default=1, help='number of batches for ppo')
     parser.add_argument('--clip_param', type=float, default=0.2, help='ppo clip parameter')
-    parser.add_argument('--log_interval', type=int, default=1e2, help='log interval, one log per n updates')
-    parser.add_argument('--save_interval', type=int, default=1e4, help='save interval, one save per n updates')
+    parser.add_argument('--log_interval', type=int, default=int(1e2), help='log interval, one log per n updates')
+    parser.add_argument('--save_interval', type=int, default=int(1e4), help='save interval, one save per n updates')
     parser.add_argument('--eval_interval', type=int, default=1, help='eval interval, one eval per n updates')
-    parser.add_argument('--num_env_steps', type=int, default=1e6, help='number of environment steps to train')
+    parser.add_argument('--num_env_steps', type=int, default=int(1e6), help='number of environment steps to train')
     parser.add_argument('--output_dir', type=str, default='result-GAE-2', help='save all outputs here')
     parser.add_argument('--recurrent_policy', action='store_true', default=False, help='use a recurrent policy')
     parser.add_argument('--use_linear_lr_decay', action='store_true', default=True, help='use a linear schedule on the learning rate')
