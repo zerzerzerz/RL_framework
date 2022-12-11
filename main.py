@@ -13,6 +13,9 @@ from a2c_ppo_acktr.arguments import get_args
 from a2c_ppo_acktr.model import Policy
 from a2c_ppo_acktr.storage import RolloutStorage
 from a2c_ppo_acktr.envs import MyEnv
+from os.path import join
+
+from evaluation import evaluate
 
 
 def main():
@@ -38,6 +41,9 @@ def main():
         envs.action_space,
         base_kwargs={'recurrent': args.recurrent_policy})
     actor_critic.to(device)
+
+    log_train = pd.DataDrame()
+    log_eval = pd.DataFrame()
 
     if args.algo == 'a2c':
         agent = algo.A2C_ACKTR(
@@ -114,6 +120,36 @@ def main():
                                  args.gae_lambda, args.use_proper_time_limits)
 
         value_loss, action_loss, dist_entropy = agent.update(rollouts)
+        new_line = {
+            "epoch": j,
+            "value_loss": value_loss,
+            "action_loss": action_loss,
+            "dist_entropy": dist_entropy,
+        }
+        log_train = pd.concat([log_train, pd.DataFrame([new_line])])
+
+        if (j+1) % args.log_interval:
+            log_train.to_csv(join(args.output_dir, 'log_train.csv'), index=None)
+
+
+        if (j+1) % args.save_interval:
+            actor_critic.cpu()
+            checkpoint = {
+                "epoch": j,
+                "model_class": actor_critic.__class__.__name__,
+                "state_dict": actor_critic.state_dict(),
+            }
+            torch.save(checkpoint, join(args.save_dir, f'epoch={j}.pt'))
+            actor_critic.to(device)
+        
+
+        if (j+1) % args.eval_interval:
+            episode_reward = evaluate(actor_critic, envs, device, args.num_steps, args.num_processes)
+            log_eval = pd.concat([log_eval,[{
+                "epoch": j+1,
+                "episode_reward": episode_reward
+            }]])
+            log_eval.to_csv(join(args.log_dir, 'log_eval.csv'), index=None)
 
         rollouts.after_update()
 
