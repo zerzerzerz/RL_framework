@@ -109,6 +109,8 @@ class RolloutStorage(object):
                                num_mini_batch=None,
                                mini_batch_size=None):
         num_steps, num_processes = self.rewards.size()[0:2]
+
+        # batch_size is the number of time points in this buffer/storage
         batch_size = num_processes * num_steps
 
         if mini_batch_size is None:
